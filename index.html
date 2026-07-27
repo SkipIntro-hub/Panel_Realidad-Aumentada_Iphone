@@ -45,8 +45,10 @@
         src="pt-truck-full-hires.glb"
         ios-src="pt-truck-full-hires.usdz"
         ar
-        ar-modes="scene-viewer webxr quick-look"
-        ar-scale="auto"
+        ar-modes="webxr scene-viewer quick-look"
+        ar-scale="fixed"
+        ar-placement="floor"
+        scale="0.3 0.3 0.3"
         camera-controls
         touch-action="pan-y"
         auto-rotate
@@ -72,7 +74,8 @@
     </model-viewer>
 
     <p class="instructions">
-        Rotá el modelo con el dedo. Tocá "Ver en AR" para colocarlo en tu espacio real.
+        Rotá el modelo con el dedo. Tocá "Ver en AR" para colocarlo en tu espacio.<br>
+        En AR: un dedo para mover, dos dedos para rotar y escalar (pinch).
     </p>
 </body>
 </html>
