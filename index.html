@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Tales — AR Viewer</title>
+    <title>Panel Tales - AR Viewer</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,44 +18,38 @@
         }
         h1 {
             font-size: 1.2rem;
-            padding: 1rem;
+            padding: 1rem 1rem 0.5rem;
             text-align: center;
-            opacity: 0.8;
+            opacity: 0.85;
+        }
+        .toolbar {
+            width: min(100%, 600px);
+            padding: 0 1rem 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        select {
+            width: 100%;
+            min-height: 44px;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            background: #1d1d1d;
+            color: #fff;
+            padding: 0 0.8rem;
+            font-size: 1rem;
         }
         model-viewer {
             width: 100%;
             max-width: 600px;
-            height: 70vh;
+            height: 68vh;
             background-color: #1a1a1a;
             --poster-color: #1a1a1a;
         }
-        .instructions {
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.9rem;
-            opacity: 0.6;
-            max-width: 400px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Panel Tales Truck — AR Viewer</h1>
-    
-    <model-viewer
-        src="pt-truck-full-hires.glb"
-        ios-src="pt-truck-full-hires.usdz"
-        ar
-        ar-modes="webxr scene-viewer quick-look"
-        ar-scale="fixed"
-        ar-placement="floor"
-        scale="1 1 1"
-        camera-controls
-        touch-action="pan-y"
-        auto-rotate
-        shadow-intensity="1"
-        alt="Panel Tales 1937 GMC Truck"
-    >
-        <button slot="ar-button" style="
+        .ar-button {
             background: #fff;
             color: #000;
             border: none;
@@ -68,14 +62,84 @@
             left: 50%;
             transform: translateX(-50%);
             cursor: pointer;
-        ">
-            📱 Ver en AR
-        </button>
+            white-space: nowrap;
+        }
+        .instructions {
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.65;
+            max-width: 420px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Panel Tales Truck - AR Viewer</h1>
+
+    <div class="toolbar">
+        <label for="modelSelect">Modelo para probar</label>
+        <select id="modelSelect"></select>
+    </div>
+
+    <model-viewer
+        id="viewer"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        ar-scale="fixed"
+        ar-placement="floor"
+        scale="1 1 1"
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        shadow-intensity="1"
+    >
+        <button slot="ar-button" class="ar-button">Ver en AR</button>
     </model-viewer>
 
     <p class="instructions">
-        Rotá el modelo con el dedo. Tocá "Ver en AR" para colocarlo en tu espacio.<br>
-        En AR: un dedo para mover, dos dedos para rotar y escalar (pinch).
+        Rota el modelo con el dedo. Toca "Ver en AR" para colocarlo en tu espacio.<br>
+        En AR: un dedo para mover, dos dedos para rotar y escalar.
     </p>
+
+    <script>
+        const models = [
+            {
+                name: "Truck hires",
+                glb: "pt-truck-full-hires.glb",
+                usdz: "pt-truck-full-hires.usdz",
+                alt: "Panel Tales truck hires"
+            },
+            {
+                name: "Truck lettering convertido",
+                glb: "pt-truck-full-lettering-1-.glb",
+                usdz: "pt-truck-full-lettering-1-.usdz",
+                alt: "Panel Tales truck lettering convertido"
+            }
+        ];
+
+        const viewer = document.getElementById("viewer");
+        const modelSelect = document.getElementById("modelSelect");
+
+        models.forEach((model, index) => {
+            const option = document.createElement("option");
+            option.value = String(index);
+            option.textContent = model.name;
+            modelSelect.appendChild(option);
+        });
+
+        function loadModel(index) {
+            const model = models[index];
+            viewer.setAttribute("src", model.glb);
+            viewer.setAttribute("ios-src", model.usdz);
+            viewer.setAttribute("alt", model.alt);
+        }
+
+        modelSelect.addEventListener("change", (event) => {
+            loadModel(Number(event.target.value));
+        });
+
+        loadModel(0);
+    </script>
 </body>
 </html>
